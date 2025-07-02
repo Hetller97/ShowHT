@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="style.css">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عرض المشاركين</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      direction: rtl;
+      background: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 320px;
+      margin: 15px auto;
+      padding: 15px;
+      text-align: right;
+      position: relative;
+    }
+
+    .card.red {
+      background: #ffcccc;
+    }
+
+    .card h2 {
+      margin: 0 0 10px 0;
+    }
+
+    .card p {
+      margin: 5px 0;
+    }
+
+    #searchInput {
+      width: 300px;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 2px solid #0b1d3f;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="location.href='index.html'">العودة إلى تسجيل المشاركين</button>
+
+  <button onclick="location.href='manage.html'">الذهاب إلى صفحة الإدارة</button>
+
+  <h1>قائمة المشاركين</h1>
+
+  <input type="text" id="searchInput" placeholder="ابحث باسم الحساب أو رقم اللاعب">
+
+  <div id="playersContainer"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4lVFojsfwliOunYjl399W9ZGrsFFMAKY",
+      authDomain: "htawer-2289b.firebaseapp.com",
+      databaseURL: "https://htawer-2289b-default-rtdb.firebaseio.com",
+      projectId: "htawer-2289b",
+      storageBucket: "htawer-2289b.firebasestorage.app",
+      messagingSenderId: "950146827456",
+      appId: "1:950146827456:web:4e440a303625080e2b1925",
+      measurementId: "G-E7483RPE05"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const playersRef = ref(db, "players");
+
+    let players = {};
+
+    const playersContainer = document.getElementById("playersContainer");
+
+    document.getElementById("searchInput").addEventListener("input", () => {
+      renderPlayers(players);
+    });
+
+    onValue(playersRef, (snapshot) => {
+      players = snapshot.val() || {};
+      renderPlayers(players);
+    });
+
+    function renderPlayers(players) {
+      const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+      playersContainer.innerHTML = "";
+
+      for (const key in players) {
+        const p = players[key];
+
+        if (
+          searchValue &&
+          !p.username.toLowerCase().includes(searchValue) &&
+          !String(p.number).includes(searchValue)
+        ) {
+          continue;
+        }
+
+        const card = document.createElement("div");
+        card.className = "card";
+        if (p.status === "مقصي") card.classList.add("red");
+
+        const equipmentText = (p.equipment && p.equipment.length > 0) ? p.equipment.join(", ") : "لا معدات";
+
+        card.innerHTML = `
+          <h2>${p.username} (#${p.number})</h2>
+          <p>رابط الحساب: <a href="${p.profileLink}" target="_blank">${p.profileLink}</a></p>
+          <p>الحالة: ${p.status}</p>
+          <p>النقاط: ${p.points ?? 0}</p>
+          <p>المعدات: ${equipmentText}</p>
+        `;
+
+        playersContainer.appendChild(card);
+      }
+    }
+  </script>
+</body>
+</html>
