@@ -108,10 +108,13 @@ const playersRef = ref(db, "players");
     });
 
     onValue(playersRef, (snapshot) => {
-    console.log(snapshot.val());
+  alert("تم الاتصال بقاعدة البيانات");
 
-    players = snapshot.val() || {};
-    renderPlayers(players);
+  players = snapshot.val() || {};
+
+  alert(JSON.stringify(players));
+
+  renderPlayers(players);
 });
 
 //    function renderPlayers(players) {
