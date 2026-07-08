@@ -64,21 +64,47 @@
       onValue
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyC4lVFojsfwliOunYjl399W9ZGrsFFMAKY",
-      authDomain: "htawer-2289b.firebaseapp.com",
-      databaseURL: "https://htawer-2289b-default-rtdb.firebaseio.com",
-      projectId: "htawer-2289b",
-      storageBucket: "htawer-2289b.firebasestorage.app",
-      messagingSenderId: "950146827456",
-      appId: "1:950146827456:web:4e440a303625080e2b1925",
-      measurementId: "G-E7483RPE05"
-    };
+//    const firebaseConfig = {
+//      apiKey: "AIzaSyC4lVFojsfwliOunYjl399W9ZGrsFFMAKY",
+//      authDomain: "htawer-2289b.firebaseapp.com",
+//      databaseURL: "https://htawer-2289b-default-rtdb.firebaseio.com",
+//      projectId: "htawer-2289b",
+//      storageBucket: "htawer-2289b.firebasestorage.app",
+//      messagingSenderId: "950146827456",
+//      appId: "1:950146827456:web:4e440a303625080e2b1925",
+//      measurementId: "G-E7483RPE05"
+//    };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const playersRef = ref(db, "players");
+//    const app = initializeApp(firebaseConfig);
+//    const db = getDatabase(app);
+//    const playersRef = ref(db, "players");
 
+
+
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC4lVFojsfwliOunYjl399W9ZGrsFFMAKY",
+  authDomain: "htawer-2289b.firebaseapp.com",
+  databaseURL: "https://htawer-2289b-default-rtdb.firebaseio.com",
+  projectId: "htawer-2289b",
+  storageBucket: "htawer-2289b.firebasestorage.app",
+  messagingSenderId: "950146827456",
+  appId: "1:950146827456:web:4e440a303625080e2b1925",
+  measurementId: "G-E7483RPE05"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+    
     let players = {};
 
     const playersContainer = document.getElementById("playersContainer");
