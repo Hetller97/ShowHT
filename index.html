@@ -114,40 +114,80 @@ const playersRef = ref(db, "players");
     renderPlayers(players);
 });
 
-    function renderPlayers(players) {
-      const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
-      playersContainer.innerHTML = "";
+//    function renderPlayers(players) {
+//      const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+//      playersContainer.innerHTML = "";
 
-      for (const key in players) {
-        const p = players[key];
+//      for (const key in players) {
+//        const p = players[key];
 
-        if (
-          searchValue &&
-          !p.username.toLowerCase().includes(searchValue) &&
-          !String(p.number).includes(searchValue)
-        ) {
-          continue;
-        }
+//        if (
+//          searchValue &&
+//          !p.username.toLowerCase().includes(searchValue) &&
+//          !String(p.number).includes(searchValue)
+//        ) {
+ //         continue;
+  //      }
 
-        const card = document.createElement("div");
-        card.className = "card";
-        if (p.status === "مقصي") card.classList.add("red");
+  //      const card = document.createElement("div");
+ //       card.className = "card";
+ //       if (p.status === "مقصي") card.classList.add("red");
 
-        const equipmentText = p.equipment
-           ? Object.values(p.equipment).join(", ")
-           : "لا معدات";
+ //       const equipmentText = p.equipment
+//           ? Object.values(p.equipment).join(", ")
+  //         : "لا معدات";
         
-        card.innerHTML = `
-          <h2>${p.username} (#${p.number})</h2>
-          <p>رابط الحساب: <a href="${p.profileLink}" target="_blank">${p.profileLink}</a></p>
-          <p>الحالة: ${p.status}</p>
-          <p>النقاط: ${p.points ?? 0}</p>
-          <p>المعدات: ${equipmentText}</p>
-        `;
+//        card.innerHTML = `
+//          <h2>${p.username} (#${p.number})</h2>
+ //         <p>رابط الحساب: <a href="${p.profileLink}" target="_blank">${p.profileLink}</a></p>
+ //         <p>الحالة: ${p.status}</p>
+//          <p>النقاط: ${p.points ?? 0}</p>
+//          <p>المعدات: ${equipmentText}</p>
+//        `;
 
-        playersContainer.appendChild(card);
-      }
+    function renderPlayers(players) {
+  const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+  playersContainer.innerHTML = "";
+
+  Object.values(players).forEach((p) => {
+
+    const username = p.username || "بدون اسم";
+    const number = p.number || 0;
+    const status = p.status || "";
+    const points = p.points || 0;
+    const profileLink = p.profileLink || "#";
+
+    const equipmentText = p.equipment
+      ? Object.values(p.equipment).join(", ")
+      : "لا معدات";
+
+    if (
+      searchValue &&
+      !username.toLowerCase().includes(searchValue) &&
+      !String(number).includes(searchValue)
+    ) {
+      return;
     }
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    if (status === "مقصي") {
+      card.classList.add("red");
+    }
+
+    card.innerHTML = `
+      <h2>${username} (#${number})</h2>
+      <p>رابط الحساب: <a href="${profileLink}" target="_blank">فتح الحساب</a></p>
+      <p>الحالة: ${status}</p>
+      <p>النقاط: ${points}</p>
+      <p>المعدات: ${equipmentText}</p>
+    `;
+
+    playersContainer.appendChild(card);
+  });
+    }
+
   </script>
 </body>
 </html>
