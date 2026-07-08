@@ -108,9 +108,11 @@ const playersRef = ref(db, "players");
     });
 
     onValue(playersRef, (snapshot) => {
-      players = snapshot.val() || {};
-      renderPlayers(players);
-    });
+    console.log(snapshot.val());
+
+    players = snapshot.val() || {};
+    renderPlayers(players);
+});
 
     function renderPlayers(players) {
       const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
@@ -131,8 +133,10 @@ const playersRef = ref(db, "players");
         card.className = "card";
         if (p.status === "مقصي") card.classList.add("red");
 
-        const equipmentText = (p.equipment && p.equipment.length > 0) ? p.equipment.join(", ") : "لا معدات";
-
+        const equipmentText = p.equipment
+           ? Object.values(p.equipment).join(", ")
+           : "لا معدات";
+        
         card.innerHTML = `
           <h2>${p.username} (#${p.number})</h2>
           <p>رابط الحساب: <a href="${p.profileLink}" target="_blank">${p.profileLink}</a></p>
